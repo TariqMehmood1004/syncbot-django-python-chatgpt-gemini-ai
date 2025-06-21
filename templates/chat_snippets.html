@@ -1,0 +1,138 @@
+{% load custom_filters %}
+{% load extract_links %}
+{% load chat_filters %}
+
+<div class="flex flex-col items-start rounded-lg gap-3 ">
+ 
+
+    {% if chats %}
+    <!-- Render Chat History -->
+    {% for chat in chats %}
+    <div
+        class="w-full flex flex-row justify-between items-center {% if chat.user_message %}justify-end{% else %}justify-start{% endif %}">
+        {% if chat.bot_response %}
+        <div class="chat chat-start w-full">
+            <div class="chat-header flex items-center gap-2 py-2">
+                <span class="font-semibold text-neutral-400">SyncBot</span>
+                <time class="text-xs text-gray-500">{{ chat.timestamp }}</time>
+            </div>
+            <div class="chat-bubble bg-slate-700 text-neutral-100 p-3 rounded-md shadow-sm overflow-hidden">
+                <p class="px-2 response-wrap text-neutral-100 normal-case">
+                    {{ chat.bot_response|simple_markdown|urlize|linebreaksbr|add_target_blank|safe }}
+
+                    {% with chat.bot_response|urlize|safe|extract_links as links %}
+                        {% if links %}
+                                <div class="mt-2 pt-2">
+                                    <a style="text-decoration: none;" href="{{ links.0 }}" target="_blank" class="block mt-2 p-3 bg-[#3481a828] hover:bg-[#3481a875] transition-all duration-300 rounded-md overflow-hidden">
+                                        <div class="flex items-center">
+                                            <!-- Thumbnail Image Preview -->
+                                            <img src="https://www.google.com/s2/favicons?sz=64&domain={{ links.0|slice:"://" }}" alt="Preview" class="w-12 h-12 rounded-md object-cover">
+                                            <div class="response-wrap line-clamp-2">
+                                                <p class="text-sm font-medium text-neutral-100">Click to view</p>
+                                                <span class="text-neutral-400">{{ links.0 }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                        {% endif %}
+                    {% endwith %}
+                </p>
+                <footer class="flex flex-row justify-between items-center mt-1">
+                    {% for link in chat.bot_response|simple_markdown|urlize|safe|extract_links %}
+                    
+                    {% if forloop.first %}
+                    <!-- First Anchor Tag -->
+                    <a style="text-decoration: none;" href="{{ link }}" target="_blank"
+                        class="w-full group inline-flex bg-[#3481a828] hover:bg-[#3481a875] border border-y-0 border-l-0 border-r-slate-700 items-center justify-center py-2 px-3 text-base text-neutral-400 font-medium rounded-l-lg transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 me-3 text-neutral-400 group-hover:text-neutral-300" viewBox="0 0 32 32"
+                            id="Link">
+                            <path
+                                d="M10.34,29.66A8,8,0,0,1,4.69,16l4.25-4.25,1.41,1.41L6.1,17.41a6,6,0,1,0,8.49,8.49l4.18-4.19,1.42,1.42L16,27.31A8,8,0,0,1,10.34,29.66ZM16.71,21,21,16.71a4,4,0,0,0-5.66-5.66,1,1,0,0,1-1.41-1.42L17.41,6.1a6,6,0,1,1,8.49,8.49l-4.23,4.22,1.42,1.42L27.31,16A8,8,0,1,0,16,4.69L12.47,8.22a3,3,0,0,0,0,4.25,3,3,0,0,0,4.24,0,2.06,2.06,0,0,1,2.83,0,2,2,0,0,1,.58,1.42,2,2,0,0,1-.58,1.41l-4.25,4.25a2.06,2.06,0,0,1-2.83,0,2,2,0,0,1-.58-1.42,2,2,0,0,1,.58-1.41l.72-.72-1.41-1.41-.72.71A4,4,0,0,0,16.71,21Zm1.41-5.66-1.41-1.41-2.83,2.83,1.41,1.41Z"
+                                fill="#595bd4" class="color000000 svgShape"></path>
+                        </svg>
+                        <span class="w-full text-neutral-400 group-hover:text-neutral-300">Visit Link</span>
+                        <svg class="w-4 h-4 ms-2 rtl:rotate-180 group-hover:translate-x-1 transition-all duration-300 text-neutral-400              group-hover:text-neutral-300"
+                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9" />
+                        </svg>
+                    </a>
+                    {% elif forloop.counter == 2 %}
+                    <!-- Second Anchor Tag with Tooltip -->
+                    <div data-tip="This feature is not available yet!" style="text-decoration: none;"
+                        class="w-full group inline-flex tooltip tooltip-warning bg-[#3481a828] hover:bg-[#3481a875] border-none items-center cursor-pointer justify-center py-2 px-3 text-base text-neutral-400 font-medium rounded-r-lg transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 me-3 text-neutral-400 group-hover:text-neutral-300" viewBox="0 0 32 32"
+                            id="Link">
+                            <path
+                                d="M10.34,29.66A8,8,0,0,1,4.69,16l4.25-4.25,1.41,1.41L6.1,17.41a6,6,0,1,0,8.49,8.49l4.18-4.19,1.42,1.42L16,27.31A8,8,0,0,1,10.34,29.66ZM16.71,21,21,16.71a4,4,0,0,0-5.66-5.66,1,1,0,0,1-1.41-1.42L17.41,6.1a6,6,0,1,1,8.49,8.49l-4.23,4.22,1.42,1.42L27.31,16A8,8,0,1,0,16,4.69L12.47,8.22a3,3,0,0,0,0,4.25,3,3,0,0,0,4.24,0,2.06,2.06,0,0,1,2.83,0,2,2,0,0,1,.58,1.42,2,2,0,0,1-.58,1.41l-4.25,4.25a2.06,2.06,0,0,1-2.83,0,2,2,0,0,1-.58-1.42,2,2,0,0,1,.58-1.41l.72-.72-1.41-1.41-.72.71A4,4,0,0,0,16.71,21Zm1.41-5.66-1.41-1.41-2.83,2.83,1.41,1.41Z"
+                                fill="#595bd4" class="color000000 svgShape"></path>
+                        </svg>
+                        <span class="w-full text-neutral-400 group-hover:text-neutral-300">Read Only</span>
+                        <svg class="w-4 h-4 ms-2 rtl:rotate-180 group-hover:translate-x-1 transition-all duration-300 text-neutral-400 group-hover:text-neutral-300"
+                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9" />
+                        </svg>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </footer>
+
+
+            </div>
+        </div>
+        {% endif %}
+        {% if chat.user_message %}
+        <div class="chat chat-end w-full">
+            <div class="chat-header flex items-center justify-end gap-2">
+                <span class="font-semibold text-neutral-400">You</span>
+                <time class="text-xs text-gray-500">{{ chat.timestamp }}</time>
+            </div>
+            <div class="chat-bubble bg-blue-600 text-white p-3 rounded-md shadow-sm overflow-hidden">
+                <p class="px-2 response-wrap text-neutral-100 normal-case">
+                    {{ chat.user_message|simple_markdown|urlize|linebreaksbr|add_target_blank|safe }}
+
+                    {% with chat.user_message|simple_markdown|urlize|safe|extract_links as links %}
+                        {% if links %}
+                                <div class="mt-2 pt-2">
+                                    <a style="text-decoration: none;" href="{{ links.0 }}" target="_blank" class="block mt-2 p-3 bg-slate-900/50 hover:bg-slate-900/60 text-white transition-all duration-300 rounded-md overflow-hidden">
+                                        <div class="flex items-center">
+                                            <!-- Thumbnail Image Preview -->
+                                            <img src="https://www.google.com/s2/favicons?sz=64&domain={{ links.0|slice:"://" }}" alt="Preview" class="w-12 h-12 rounded-md object-cover">
+                                            <div class="response-wrap line-clamp-2">
+                                                <p class="text-sm font-medium text-neutral-100">Click to view</p>
+                                                <span class="text-neutral-400">{{ links.0 }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                        {% endif %}
+                    {% endwith %}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <!-- Display Random Questions -->
+    <div class="flex flex-col gap-1 w-full">
+        {% for question in random_questions %}
+        <form hx-post="/" hx-target="#chat-box" hx-swap="beforeend" method="POST">
+            {% csrf_token %}
+            <!-- Corrected input tag -->
+            <input type="hidden" name="question" value="{{ question }}">
+
+            <button type="submit" class="chat chat-start max-w-lg">
+                <div
+                    class="text-left chat-bubble bg-[#3481a828] hover:bg-[#3481a875] text-slate-200 p-3 rounded-md overflow-hidden transition-all duration-300">
+                    {{ question }}
+                </div>
+            </button>
+        </form>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+

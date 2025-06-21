@@ -1,0 +1,24 @@
+<div class="w-full flex justify-between items-center {{ chat.user_message|yesno:'justify-end,justify-start' }}">
+    {% if chat.bot_response %}
+        <div class="chat chat-start max-w-lg">
+            <div class="chat-header flex items-center gap-2">
+                <span class="font-semibold text-gray-800">SyncBot</span>
+                <time class="text-xs text-gray-500">{{ chat.timestamp|date:"M d, Y h:i A" }}</time>
+            </div>
+            <div class="chat-bubble bg-gray-200 text-gray-800 p-3 rounded-md shadow-sm">
+                {{ chat.bot_response|safe }}
+            </div>
+        </div>
+    {% endif %}
+    {% if chat.user_message %}
+        <div class="chat chat-end max-w-lg">
+            <div class="chat-header flex items-center justify-end gap-2">
+                <span class="font-semibold text-blue-600">You</span>
+                <time class="text-xs text-gray-500">{{ chat.timestamp|date:"M d, Y h:i A" }}</time>
+            </div>
+            <div class="chat-bubble bg-blue-600 text-white p-3 rounded-md shadow-sm">
+                {{ chat.user_message|safe }}
+            </div>
+        </div>
+    {% endif %}
+</div>

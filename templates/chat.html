@@ -1,0 +1,222 @@
+{% extends "_layout.html" %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+<div
+    class="relative w-full container max-w-8xl p-0 md:p-3 overflow-y-auto rounded-xl remove-scroll justify-center overflow-hidden mx-auto">
+    <!-- Header Section -->
+    <div class="text-center py-3 leading-tight">
+        <h1 class="text-3xl font-bold mb-4">SyncBot</h1>
+        <h1 class="text-5xl font-bold mb-4">What can I help with?</h1>
+        <p class="text-lg text-slate-500">Get your questions answered instantly.</p>
+    </div>
+
+    <div class="flex flex-col gap-3 items-center justify-center">
+        
+        <!-- Chat Box -->
+        <div class="max-w-4xl w-full p-4 rounded-xl space-y-2 h-[46vh] flex flex-col overflow-y-auto remove-scroll"
+            id="chat-box" hx-get="/load-chats/" hx-trigger="load"  hx-swap="innerHTML" hx-on="htmx:afterSwap: scrollToLastChat()">
+            <!-- Chats will dynamically load here -->
+        </div>
+
+
+        <!-- Loader -->
+        <div class="relative z-10 hidden" id="loading-spinner" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="fixed inset-0 bg-blue-300/85 transition-opacity" aria-hidden="true"></div>
+
+                <div class="fixed inset-0 z-10 w-screen h-screen overflow-y-auto">
+                    <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div
+                            class="relative transform overflow-hidden rounded-lg bg-transparent text-left flex justify-center items-center transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                            <div class="relative">
+                                <!-- Outer Spinner -->
+                                <div class="animate-spin rounded-full h-9 w-9 border-t-4 border-slate-900 border-opacity-70"></div>
+                                <!-- Inner Dot -->
+                                <div
+                                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-3 w-3 bg-slate-900 rounded-full shadow-md">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    
+
+
+    <!-- Form Section -->
+    <form hx-post="/" hx-target="#chat-box" hx-swap="beforeend" hx-indicator="#loading-spinner"
+        class="fixed bottom-0 md:bottom-2 left-[50%] translate-x-[-50%] shadow-2xl shadow-blue-500/20 bg-neutral-900 max-w-4xl w-full rounded-xl p-4"
+        id="askForm" method="POST">
+        {% csrf_token %}
+
+        <div class="flex absolute top-0 left-0 w-full h-full rounded-xl z-10 items-center justify-center"
+            id="response-loading-spinner">
+            <div class="relative">
+                <!-- Outer Spinner -->
+                <div class="animate-spin rounded-full h-9 w-9 border-t-4 border-blue-500 border-opacity-70"></div>
+                <!-- Inner Dot -->
+                <div
+                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-3 w-3 bg-blue-500 rounded-full shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center text-slate-800 justify-center relative">
+            <!-- Input Field -->
+            <textarea id="question" name="question" rows="1" placeholder="Ask anything" required
+                class=" text-white placeholder-white resize-none flex w-full remove-scroll bg-transparent rounded-lg border-none px-3 py-[0.8rem] text-md placeholder-slate-900 outline-none"></textarea>
+
+            <div class="flex items-center justify-end w-full mt-1">
+                <!-- Submit Button -->
+                <button id="sendButton"
+                    class="bg-blue-600 text-white text-2xl flex items-center justify-center w-10 h-10 font-semibold rounded-full hover:bg-blue-500 transition duration-300 relative">
+
+                    <svg id="openai-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 26 26"
+                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg>
+
+
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loader = document.getElementById("loading-spinner");
+        const responseLoadingSpinner = document.getElementById("response-loading-spinner");
+        const chatBox = document.getElementById("chat-box");
+
+        if (loader && chatBox) {
+            // Show loader and collapse chatbox height on page load
+            loader.classList.remove("hidden");
+            responseLoadingSpinner.classList.add("hidden");
+            chatBox.classList.remove("h-[47vh]");
+            chatBox.classList.add("h-[0vh]");
+        }
+    });
+
+    // Hide loader and expand chatbox height after HTMX request completes
+    document.addEventListener("htmx:afterRequest", function () {
+        const loader = document.getElementById("loading-spinner");
+        const chatBox = document.getElementById("chat-box");
+
+        if (loader && chatBox) {
+            loader.classList.add("hidden"); // Hide loader
+            chatBox.classList.remove("h-[0vh]");
+            chatBox.classList.add("h-[47vh]"); // Expand chatbox height
+        }
+    });
+</script>
+
+<script>
+    function scrollToLastChat() {
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) {
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }
+</script>
+
+<script>
+
+    const responseLoadingSpinner = document.getElementById('response-loading-spinner');
+    const questionInput = document.getElementById('question');
+    const askForm = document.getElementById('askForm');
+
+    // Set initial number of rows for the textarea
+    const maxRows = 4;
+
+    questionInput.addEventListener('keydown', function (e) {
+        // Handle Shift+Enter for new line
+        if (e.key === 'Enter' && e.shiftKey) {
+            e.preventDefault(); // Prevent default behavior
+            const cursorPosition = questionInput.selectionStart;
+            const value = questionInput.value;
+
+            // Insert a new line at the current cursor position
+            questionInput.value = value.slice(0, cursorPosition) + '\n' + value.slice(cursorPosition);
+            questionInput.selectionStart = questionInput.selectionEnd = cursorPosition + 1;
+
+            // Adjust height based on the number of lines
+            adjustTextAreaHeight();
+        } else if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent default behavior
+            askForm.requestSubmit(); // Submit the form programmatically
+        }
+    });
+
+    questionInput.addEventListener('input', function () {
+        // Adjust the height dynamically on every input
+        adjustTextAreaHeight();
+    });
+
+    // Function to dynamically adjust the height of the textarea
+    function adjustTextAreaHeight() {
+        if (!questionInput) return;
+
+        // Temporarily set height to auto to calculate the full scrollHeight
+        questionInput.style.height = 'auto';
+
+        // Calculate the number of rows based on the scrollHeight
+        const lineHeight = parseInt(window.getComputedStyle(questionInput).lineHeight, 10) || 24; // Default to 24px if lineHeight cannot be computed
+        const rows = Math.ceil(questionInput.scrollHeight / lineHeight);
+
+        if (rows > maxRows) {
+            // Set height to maximum rows and enable scrolling
+            questionInput.style.height = `${maxRows * lineHeight}px`;
+            questionInput.style.overflowY = 'scroll'; // Enable vertical scroll
+        } else {
+            // Adjust height dynamically and disable scrolling
+            questionInput.style.height = `${rows * lineHeight}px`;
+            questionInput.style.overflowY = 'hidden'; // Disable vertical scroll
+        }
+    }
+
+    // HTMX event listeners for request lifecycle
+    document.addEventListener('htmx:beforeRequest', function () {
+        // Add loader animation with pulse effect and rounded-full style
+        askForm.classList.add('pointer-events-none', 'disabled', 'rounded-full');
+        responseLoadingSpinner.classList.remove('hidden');
+    });
+
+
+
+    document.addEventListener('htmx:afterRequest', function () {
+        // Remove loader animation after the request is complete
+        askForm.classList.remove('pointer-events-none', 'animate-pulse', 'rounded-full');
+        responseLoadingSpinner.classList.add('hidden');
+
+        // Reset the textarea after form submission
+        questionInput.value = '';
+        questionInput.style.height = 'auto'; // Reset height to default
+        questionInput.style.overflowY = 'hidden'; // Remove scroll
+        questionInput.focus(); // Refocus the input field
+
+        // Scroll to the last chat message
+        scrollToLastChat();
+    });
+</script>
+
+
+{% endblock %}

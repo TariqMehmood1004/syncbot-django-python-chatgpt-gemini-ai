@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found</title>
+
+    <link rel="shortcut icon" href="{% static 'images/favicon_image.png' %}" type="image/x-icon">
+
+    <!--  -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- Roboto font -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
+      rel="stylesheet" />
+
+     <style>
+          html {
+              scroll-behavior: smooth;
+          }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50vw, -10vh);
+            }
+            50% {
+                transform: translate(100vw, 50vh);
+            }
+            75% {
+                transform: translate(-50vw, 80vh);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes move-reverse {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(-50vw, 10vh);
+            }
+            50% {
+                transform: translate(-100vw, -50vh);
+            }
+            75% {
+                transform: translate(50vw, -80vh);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .animate-move {
+            animation: move 30s infinite linear;
+        }
+
+        .animate-move-reverse {
+            animation: move-reverse 30s infinite linear;
+        }
+    </style>
+
+</head>
+<body class="relative w-full h-screen bg-[#281B33]/80 text-slate-200 overflow-x-hidden">
+
+    <!-- Animated Shapes -->
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Shape 1 -->
+        <div class="absolute w-96 h-96 bg-pink-500 opacity-50 blur-xl rounded-full animate-move"
+             style="top: 10%; left: 15%;"></div>
+        <!-- Shape 2 -->
+        <div class="absolute w-72 h-72 bg-blue-500 opacity-50 blur-2xl rounded-full animate-move-reverse"
+             style="top: 60%; left: 50%;"></div>
+        <!-- Shape 3 -->
+        <div class="absolute w-80 h-80 bg-purple-500 opacity-50 blur-xl rounded-full animate-move"
+             style="top: 30%; right: 10%;"></div>
+    </div>
+
+    <section class="py-24 relative w-full h-screen flex justify-center items-center">
+        <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+            <div class="w-full flex-col justify-center items-center lg:gap-14 gap-10 inline-flex">
+                <div class="w-full flex-col justify-center items-center gap-16 flex me-0">
+                    <div class="w-full flex-col justify-center items-center gap-6 flex">
+                        <div class="w-full flex-col justify-start items-center gap-2.5 flex">
+                            <h2 class="text-center text-slate-200 text-6xl font-bold font-manrope leading-normal">Page Not Found</h2>
+                            <p class="text-center text-slate-200 text-base font-normal leading-relaxed">The requested resource was not found on this server. If you think this is a mistake, please contact us</p>
+                            <div class="text-center text-slate-200 text-base font-normal leading-relaxed">The given requested URL is incorrect <span class="bg-slate-700 p-2 px-4 rounded text-sm">{{ request.path }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</body>
+</html>

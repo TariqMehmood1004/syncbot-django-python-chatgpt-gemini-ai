@@ -1,0 +1,213 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SERVER ERROR</title>
+
+        <link rel="shortcut icon" href="{% static 'images/favicon_image.png' %}" type="image/x-icon">
+
+
+    <!--  -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- Roboto font -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
+      rel="stylesheet" />
+
+     <style>
+          html {
+              scroll-behavior: smooth;
+          }
+    </style>
+    <style>
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50vw, -10vh);
+            }
+            50% {
+                transform: translate(100vw, 50vh);
+            }
+            75% {
+                transform: translate(-50vw, 80vh);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes move-reverse {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(-50vw, 10vh);
+            }
+            50% {
+                transform: translate(-100vw, -50vh);
+            }
+            75% {
+                transform: translate(50vw, -80vh);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .animate-move {
+            animation: move 30s infinite linear;
+        }
+
+        .animate-move-reverse {
+            animation: move-reverse 30s infinite linear;
+        }
+    </style>
+
+</head>
+<body class="relative w-full h-screen bg-[#281B33]/80 text-slate-200 overflow-x-hidden">
+
+<!-- Animated Shapes -->
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Shape 1 -->
+        <div class="absolute w-96 h-96 bg-pink-500 opacity-50 blur-xl rounded-full animate-move"
+             style="top: 10%; left: 15%;"></div>
+        <!-- Shape 2 -->
+        <div class="absolute w-72 h-72 bg-blue-500 opacity-50 blur-2xl rounded-full animate-move-reverse"
+             style="top: 60%; left: 50%;"></div>
+        <!-- Shape 3 -->
+        <div class="absolute w-80 h-80 bg-purple-500 opacity-50 blur-xl rounded-full animate-move"
+             style="top: 30%; right: 10%;"></div>
+    </div>
+
+    <section class="py-24 relative">
+        <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+            <div class="w-full flex-col justify-center items-center lg:gap-14 gap-10 inline-flex">
+                <a href="">
+                    <img class="w-60 object-cover duration-300 transition-all hover:scale-105" src="{% static 'images/logo.png' %}" alt="logo">
+                </a>
+                <div class="w-full flex-col justify-center items-center gap-16 flex me-0">
+                    <div class="w-full flex-col justify-center items-center gap-6 flex">
+                        <div class="w-full flex-col justify-start items-center gap-2.5 flex">
+                            <h2 class="text-center text-slate-200 text-4xl font-bold font-manrope leading-normal">Please bear with us! We're currently under maintenance.</h2>
+                            <p class="text-center text-slate-200 text-base font-normal leading-relaxed">It's going to take some time to fix the error. We'll be back online in.</p>
+                        </div>
+                        <div class="flex items-start justify-center w-full gap-2 count-down-main text-slate-200">
+                            <div class="timer bg-orange-500 p-1 px-2 rounded-lg font-bold">
+                              <div class="">
+                                <h3 class="countdown-element days text-center text-3xl  font-manrope leading-normal"></h3>
+                              </div>
+                            </div>
+                            <h3 class="text-center text-3xl font-normal font-manrope leading-normal">:</h3>
+                            <div class="timer bg-orange-500 p-1 px-2 rounded-lg font-bold">
+                              <div class="">
+                                <h3 class="countdown-element hours text-center text-3xl font-manrope leading-normal"></h3>
+                              </div>
+                            </div>
+                            <h3 class="text-center text-3xl font-normal font-manrope leading-normal">:</h3>
+                            <div class="timer bg-orange-500 p-1 px-2 rounded-lg font-bold">
+                              <div class="">
+                                <h3 class="countdown-element minutes text-center text-3xl font-manrope leading-normal"></h3>
+                              </div>
+                            </div>
+                            <h3 class="text-center text-3xl font-normal font-manrope leading-normal">:</h3>
+                            <div class="timer bg-orange-500 p-1 px-2 rounded-lg font-bold">
+                              <div class="">
+                                <h3 class="countdown-element seconds text-center text-3xl font-manrope leading-normal"></h3>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                    <img src="{% static 'images/503.png' %}" alt="under maintenance image" class="object-cover w-96">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Scripts-->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<!--Custom Script-->
+<script>
+    // count-down timer
+    let dest = new Date("mar 31, 2025 23:59:59").getTime();
+
+    let x = setInterval(function () {
+      let now = new Date().getTime();
+      let diff = dest - now;
+      // Check if the countdown has reached zero or negative
+      if (diff <= 0) {
+        // Set the destination date to the same day next month
+        let nextMonthDate = new Date();
+        nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+
+        // If the current month is December, set the destination date to the same day next year
+        if (nextMonthDate.getMonth() === 0) {
+          nextMonthDate.setFullYear(nextMonthDate.getFullYear() + 1);
+        }
+
+        dest = nextMonthDate.getTime();
+        return; // Exit the function
+      }
+
+      let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      if (days < 10) {
+        days = `0${days}`;
+      }
+
+      if (hours < 10) {
+        hours = `0${hours}`;
+      }
+      if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
+      if (seconds < 10) {
+        seconds = `0${seconds}`;
+      }
+
+      // Get elements by class name
+      let countdownElements = document.getElementsByClassName("countdown-element");
+
+      // Loop through the elements and update their content
+      for (let i = 0; i < countdownElements.length; i++) {
+        let className = countdownElements[i].classList[1]; // Get the second class name
+        switch (className) {
+          case "days":
+            countdownElements[i].innerHTML = days;
+            break;
+          case "hours":
+            countdownElements[i].innerHTML = hours;
+            break;
+          case "minutes":
+            countdownElements[i].innerHTML = minutes;
+            break;
+          case "seconds":
+            countdownElements[i].innerHTML = seconds;
+            break;
+          default:
+            break;
+        }
+      }
+    }, 10);
+</script>
+
+</body>
+</html>
