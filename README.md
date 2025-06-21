@@ -8,13 +8,8 @@
 
 1. [Introduction](#introduction)
 2. [Installation](#installation)
-3. [Configuration](#configuration)
-4. [API Keys](#api-keys)
-5. [Technologies Used](#technologies-used)
-6. [Database Schema](#database-schema)
-7. [API Documentation](#api-documentation)
-8. [Contributing](#contributing)
-9. [License](#license)
+3. [Contributing](#contributing)
+4. [License](#license)
 
 **Introduction**
 ---------------
